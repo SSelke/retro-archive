@@ -1,0 +1,5 @@
+export const FETCH_USER = "FETCH_USER";
+export const FETCH_RESULTS = "FETCH_RESULTS";
+export const FETCH_TERM = "FETCH_TERM";
+export const FETCH_GAME = "FETCH_GAME";
+export const SET_SEARCH_REDIRECT = "SET_SEARCH_REDIRECT";

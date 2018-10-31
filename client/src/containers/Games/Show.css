@@ -1,0 +1,41 @@
+.parallax-container {
+    position: absolute;
+    left: 0;
+    height: 220px;
+    margin-top: -260px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.parallax-container img {
+    -webkit-filter: blur(5px);
+    filter: blur(5px);
+}
+
+.game-container {
+    z-index: 20;
+}
+
+.game-show-header {
+    height: 155px;
+}
+
+.game-show-info {
+    margin-top: 40px;
+}
+
+.empty-header {
+   height: 220px;
+}
+
+#read-more-summary {
+    overflow: hidden;
+    height: 3.6em;
+    line-height: 1.2em;
+}
+
+@media (max-width: 767px) {
+    .game-name {
+        color: #000 !important;
+    }
+}
