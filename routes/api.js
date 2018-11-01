@@ -6,6 +6,7 @@ const keys = require('../config/keys');
 const client = igdb(keys.igdbKey)
 
 router.get('/search', (req, res) => {
+    console.log('here');
     client.games({
         filters: {
             'first_release_date-exists': "true",
