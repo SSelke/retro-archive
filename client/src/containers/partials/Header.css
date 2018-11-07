@@ -6,6 +6,10 @@
     font-size: 2.25rem;
 }
 
+.web-brand:hover {
+    text-decoration: none;
+}
+
 .nav-scroller {
     position: relative;
     z-index: 2;

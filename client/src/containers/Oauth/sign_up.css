@@ -1,0 +1,9 @@
+.sign-up-container {
+    position: relative;
+    min-height: 100%;
+}
+
+.sign-up-modal {
+    width: 400px;
+    height: 400px;
+}

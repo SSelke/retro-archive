@@ -40,7 +40,7 @@ class Landing extends Component {
                 <main className="container">
                     <div className="row mb-2">
                         <div className="col bg-white text-center">
-                            Hello
+                            
                         </div>
                     </div>
                 </main>

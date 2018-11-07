@@ -23,8 +23,13 @@ passport.use(new GoogleStrategy({
     proxy: true
 }, 
 async (accessToken, refreshToken, profile, done) => {
-        const existingUser = await User.findOne({googleID: profile.id});
-
+    const existingUser = await User.findOne({ googleID: profile.id }).populate({
+                                                                                path: 'collections',
+                                                                                populate: {
+                                                                                    path: 'gamesCollected'
+                                                                                }
+                                                                            });
+        console.log(existingUser);
         if(existingUser){
            return done(null, existingUser);
         }

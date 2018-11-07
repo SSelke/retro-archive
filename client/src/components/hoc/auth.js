@@ -1,16 +1,23 @@
 import React from 'react' 
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { showModal } from '../../action';
+
 
 export default function (ComposedComponent) {
     class Authenticate extends React.Component {
 
+        componentDidMount = () => {
+            if (!this.props.auth) {
+                this.props.showModal("SIGN_UP");
+            }
+        }
+
         renderAuth = () => {
             if (this.props.auth) {
                 return <ComposedComponent {...this.props} />
-            } else {
-                return <Redirect to="/" />;
             }
+            return <Redirect to="/" />;
         }
 
         render() {
@@ -24,5 +31,5 @@ export default function (ComposedComponent) {
         }
     }
 
-    return connect(mapStateToProps)(Authenticate);
+    return connect(mapStateToProps, { showModal })(Authenticate);
 }

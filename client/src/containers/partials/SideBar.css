@@ -1,0 +1,18 @@
+.sidebar-container {
+    height: 400px !important;
+    list-style: none;
+}
+
+.sidebar-nav-item {
+    height: 50px;
+    font-size: 18px;
+}
+
+.sidebar-nav-item > a {
+    color: white;
+}
+
+
+.sidebar-nav-ul {
+    width: 100%;
+}

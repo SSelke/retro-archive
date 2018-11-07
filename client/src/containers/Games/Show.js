@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setGameShow } from '../../action'; 
-import _ from 'lodash';
 import './Show.css';
 
 class Show extends Component {
