@@ -114,7 +114,6 @@ router.get('/get_game_list', (req, res) => {
 router.delete('/delete_collection', (req, res) => {
     Collection.findOneAndDelete({_id: req.query.id}, (err, doc) => {
     });
-    console.log(req.query.id);
     User.findOneAndUpdate({ googleID: req.query.userID }, { $pull: { collections: req.query.id } }, (err, doc) => {
         if (err) {
             console.log(err);
@@ -129,74 +128,21 @@ router.get('/logout', (req, res) => {
 });
 
 router.get('/current_user', (req, res) => {
-    console.log(req.user);
-    User.findOne({ googleID: req.user.googleID }).populate({
-        path: 'collections',
-        populate: {
-            path: 'gamesCollected'
-        }
-    }).exec((err, user) => {
-        if ( err ) {
-            console.log(err);
-            res.redirect('/');
-        } else {
-            res.send(user);
-        }
-    });
+    const user = req.user;
+    res.send(user);
+    // User.findOne({ googleID: user.googleID }).populate({
+    //     path: 'collections',
+    //     populate: {
+    //         path: 'gamesCollected'
+    //     }
+    // }).exec((err, user) => {
+    //     if ( err ) {
+    //         console.log(err);
+    //         res.redirect('/');
+    //     } else {
+    //         res.send(user);
+    //     }
+    // });
 });
 
 module.exports = router;
-
-
-
-
-//ADD DUMMY DATA
-
-// router.get('/get_collection', (req, res) => {
-    // async function updateUser() {
-
-        // const collection = await new Collection({
-        //     type: 'SNES',
-        //     name: 'First SNES Collection',
-        //     gamesCollected: [{ id: 5353 }]
-        // }).save();
-
-        // User.updateOne({ googleID: req.user.googleID }, { $push: { collections: collection } }, (err, user) => {
-        //     if (err) {
-        //         console.log(err);
-        //     } else {
-        //         console.log(user);
-        //     }
-        // });
-    // }
-    // updateUser();
-// });
-
-// axios.get("https://api-endpoint.igdb.com/games/?fields=name,platforms&filter[platforms][in]=19&limit=50&offset=50&order=name:asc", {
-//     headers: {
-//         "user-key": keys.igdbKey,
-//         Accept: "application/json"
-//     }
-// })
-//     .then(response => {
-//         // Do work here
-//         res.send(response.data);
-//     })
-//     .catch(e => {
-//         console.log("error", e);
-//     });
-
-// router.get('/find_console', (req, res) => {
-//     client.platforms({
-//         limit: 20,
-//         search: "sega"
-//     }, [
-//         'name',
-//         'id'
-//     ]).then(response => {
-//             res.send(response.body);
-//     }).catch(e => {
-//         console.log(e);
-//         res.send(e);
-//     });
-// });
