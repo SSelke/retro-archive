@@ -9,7 +9,6 @@ const User = mongoose.model('users');
 const client = igdb(keys.igdbKey)
 
 router.get('/search', (req, res) => {
-    console.log(req.query.keyword);
     client.games({
         filters: {
             'first_release_date-exists': "true",
