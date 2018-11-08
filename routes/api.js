@@ -89,7 +89,6 @@ router.post('/save_collection', (req, res) => {
 });
 
 router.get('/get_game_list', (req, res) => {
-    console.log(req.query.offset + 'Offset');
     client.games({
         filters: {
             'platforms-in': req.query.id,

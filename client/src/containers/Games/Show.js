@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setGameShow } from '../../action'; 
+import _ from 'lodash';
 import './Show.css';
 
 class Show extends Component {
@@ -24,6 +25,13 @@ class Show extends Component {
             toggler.innerHTML = "Read More";
         }
         // summary.style.height = 'auto' ? summary.style.height = '3.6rem' : summary.style.height = 'auto';
+    }
+
+    renderAddToCollction = () => {
+        // console.log(this.props);
+        console.log(this.props.auth.collections);
+        const collections = _.mapKeys(this.props.auth.collections, "id");
+        console.log(collections);
     }
 
     render() {
@@ -53,6 +61,7 @@ class Show extends Component {
                                     <div className="col-md-5 col-sm-12 d-flex justify-content-center mt-3 pt-3">
                                         <div>
                                             <img className="d-flex" src={`//images.igdb.com/igdb/image/upload/t_cover_big/${result.cover.cloudinary_id}.jpg`} alt="" />
+                                            {this.renderAddToCollction()}
                                         </div>
                                     </div>
                                     <div className="col-md-7 col-sm-12">
@@ -84,7 +93,7 @@ class Show extends Component {
 }
 
 function mapStateToProps(state) {
-    return { result: state.selectedGame };
+    return { result: state.selectedGame, auth: state.auth };
 }
 
 export default withRouter(connect(mapStateToProps, { setGameShow })(Show));

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { findCompany } from '../../../assets/companies/companies';
 import { connect } from 'react-redux';
-import { hideModal, fetchCollections } from '../../../action';
+import { hideModal, fetchUser } from '../../../action';
 import './add_collection.css';
 import axios from 'axios';
 
@@ -51,7 +51,7 @@ class addCollection extends Component {
         const name = document.getElementById('console_name').value;
         await axios.post(`/api/save_collection?name=${name}&id=${id}&console=${selectedConsole}`);
         this.destroyModal();
-        this.props.fetchCollections();
+        this.props.fetchUser();
     }
 
     render () {
@@ -92,4 +92,4 @@ class addCollection extends Component {
     }
 }
 
-export default connect(null, { hideModal, fetchCollections })(addCollection);
+export default connect(null, { hideModal, fetchUser })(addCollection);

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { fetchGameList,
          addToGameList,
          setShowCollection, 
+         fetchUser,
          setGameShow } from '../../action';
 
 import _ from 'lodash';
@@ -32,6 +33,7 @@ class Collections extends Component {
     deleteCollection = async () => {
         axios.delete(`/api/delete_collection?id=${this.props.collection._id}&userID=${this.props.auth.googleID}`);
         this.props.history.push(`/users/dashboard`);
+        this.props.fetchUser()
     }
 
     renderRow = (group) => {
@@ -114,5 +116,6 @@ export default connect(mapStateToProps, {
                                             fetchGameList,  
                                             addToGameList,
                                             setShowCollection,
+                                            fetchUser,
                                             setGameShow }
                         )(Collections);
