@@ -8,6 +8,11 @@ import _ from 'lodash';
 import Collections from './containers/Collections/Collections';
 
 class AuthRoutes extends Component {
+
+    // componentDidMount = () => {
+    //     this.props.fetchCollections();
+    // }
+
     render() {
         return (
             <div className="container-fluid main h-100">
@@ -25,6 +30,6 @@ class AuthRoutes extends Component {
     }
 }
 
-const mapStateToProps = state => ({collections: state.collections})
+const mapStateToProps = state => ({ collections: state.collections})
 
 export default connect(mapStateToProps, { fetchCollections })(AuthRoutes);

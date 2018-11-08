@@ -8,9 +8,9 @@ import './Dashboard.css';
 
 class Dashboard extends Component {
 
-    componentDidMount = () => {
-        this.props.fetchCollections();
-    }
+    // componentDidMount = () => {
+    //     this.props.fetchCollections();
+    // }
 
     render() {
         const SNESpercentage = 23;

@@ -9,6 +9,7 @@ const User = mongoose.model('users');
 const client = igdb(keys.igdbKey)
 
 router.get('/search', (req, res) => {
+    console.log(req.user, "Search");
     client.games({
         filters: {
             'first_release_date-exists': "true",
@@ -122,27 +123,20 @@ router.delete('/delete_collection', (req, res) => {
     });
 });
 
+router.get('/current_user', (req, res) => {
+    User.findOne({ googleID: req.user.googleID }).populate({
+        path: 'collections',
+        populate: {
+            path: 'gamesCollected'
+        }
+    }).exec((err, user) => {
+        res.json(user);
+    });
+});
+
 router.get('/logout', (req, res) => {
     req.logout();
     res.redirect('/');
-});
-
-router.get('/current_user', (req, res) => {
-    const user = req.user;
-    res.send(user);
-    // User.findOne({ googleID: user.googleID }).populate({
-    //     path: 'collections',
-    //     populate: {
-    //         path: 'gamesCollected'
-    //     }
-    // }).exec((err, user) => {
-    //     if ( err ) {
-    //         console.log(err);
-    //         res.redirect('/');
-    //     } else {
-    //         res.send(user);
-    //     }
-    // });
 });
 
 module.exports = router;

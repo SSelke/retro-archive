@@ -4,9 +4,9 @@ import {
         FETCH_RESULTS,
         FETCH_TERM,
         FETCH_GAME,
-        FETCH_COLLECTIONS,
         FETCH_GAME_LIST,
         ADD_TO_GAME_LIST,
+        SET_USER,
         SET_SEARCH_REDIRECT,
         SET_SHOW_COLLECTION,
         SHOW_MODAL,
@@ -38,8 +38,9 @@ export const addToGameList = (id, offset) => async dispatch => {
                 dispatch({ type: ADD_TO_GAME_LIST, payload: res.data });
 }
 export const fetchCollections = () => async dispatch => {
-    const res = await axios.get(`/api/get_collection`)
-                dispatch({ type: FETCH_COLLECTIONS, payload: res.data });
+    const res = await axios.get('/api/fetch_user')
+        console.log("secondary");
+                dispatch({ type: SET_USER, payload: res.data });
 
 }
 

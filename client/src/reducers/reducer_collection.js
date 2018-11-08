@@ -8,7 +8,7 @@ export default function (state = null, action) {
         case undefined:
             return state;
         case SET_SHOW_COLLECTION:
-            return action.payload;
+            return action.payload || null;
         default:
             return state;
     }

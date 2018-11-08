@@ -23,7 +23,6 @@ class SideBar extends Component {
     setStore = async (collection) => {
         await this.setCollection(collection);
         await this.props.fetchGameList(collection.id);
-        console.log('hello');
         this.props.history.push(`/users/collections/${collection._id}/${collection.id}`);
     }
 
@@ -66,7 +65,7 @@ class SideBar extends Component {
 }
 
 function mapStateToProps(state) {
-    return { collections: state.collections };
+    return { collections: state.collections, user: state.user };
 }
 
 export default connect(mapStateToProps, { fetchSearchResults, showModal, setShowCollection, fetchGameList })(SideBar);

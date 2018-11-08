@@ -16,7 +16,7 @@ class Collections extends Component {
     }
 
     componentDidMount = () => { 
-        if (!this.props.collection) {
+        if (!this.props.collection || this.props.auth.collections) {
             this.renderOnRefresh();
         }
     }
@@ -24,7 +24,6 @@ class Collections extends Component {
     renderOnRefresh = async () => {
         let collections = null;
         collections = _.mapKeys(this.props.auth.collections, "_id");
-        // console.log(this.props);
         const collection = _.find(collections, { _id: this.props.match.params.id });
         await this.props.setShowCollection(collection);
         await this.props.fetchGameList(this.props.match.params.console);
@@ -46,7 +45,7 @@ class Collections extends Component {
             <div className="jumbotron">
                 <div className="mb-3" onClick={() => { this.showGame(game.id) }}>
                     <img src={game.cover.url} className="d-inline-block" alt="" />
-                    <h5 className="d-inline-block ml-2">{game.name}</h5>
+                    <h5 className="d-inline-block ml-2 text-nowrap">{game.name}</h5>
                 </div>
             </div>
         </div>
