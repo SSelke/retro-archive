@@ -7,7 +7,28 @@ const collectionSchema = new Schema({
     id: String,
     gamesCollected: [
         {
-            id: Number
+            id: Number,
+            name: String,
+            summary: String,
+            first_release_date: Number,
+            screenshots: [
+                {
+                    url: String,
+                    couldinary_id: String,
+                    width: Number,
+                    height: Number
+                }
+            ],
+            cover: {
+                url: String,
+                couldinary_id: String,
+                width: Number,
+                height: Number
+            },
+            platfroms: [
+                Number
+            ]
+
         }
     ]
 });

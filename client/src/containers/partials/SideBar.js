@@ -36,7 +36,6 @@ class SideBar extends Component {
     }
 
     setCollection = (collection) => {
-        console.log(collection);
         this.props.setShowCollection(collection);
     }
 

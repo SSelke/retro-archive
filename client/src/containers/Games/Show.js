@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { setGameShow } from '../../action'; 
+import { setGameShow, fetchUser } from '../../action'; 
 import _ from 'lodash';
+import axios from 'axios';
 import './Show.css';
 
 class Show extends Component {
@@ -24,14 +25,50 @@ class Show extends Component {
             summary.style.height = '3.6rem';
             toggler.innerHTML = "Read More";
         }
-        // summary.style.height = 'auto' ? summary.style.height = '3.6rem' : summary.style.height = 'auto';
+    }
+
+    addGameToCollection = async (e) => {
+        e.preventDefault();
+        let checkedValue = document.querySelectorAll('input[type=checkbox]:checked');
+        console.log(checkedValue);
+        if (checkedValue.length === 0) {
+            return;
+        }
+        let values = [];
+        checkedValue.forEach((collection) => {
+            values.push(collection.value);
+        });
+        await axios.post("/api/addGameToCollections", { ids: values, game: this.props.result});
+        this.props.fetchUser();
     }
 
     renderAddToCollction = () => {
-        // console.log(this.props);
-        console.log(this.props.auth.collections);
-        const collections = _.mapKeys(this.props.auth.collections, "id");
-        console.log(collections);
+        const { collections } = this.props.auth;
+        const newColl = _.mapKeys(collections, '_id');
+        const consoles = this.props.result.platforms;
+        let container = [];
+        _.forEach(newColl, (coll) => {
+            if ( consoles.includes(Number(coll.id)) ) {
+                container.push(coll);
+            }
+        });
+        if (!container.length) {
+            return;
+        }
+        return <div className="my-4">
+            <h4 className="mb-3">Add {this.props.result.name} to Collection</h4>
+            <form onSubmit={(event) => this.addGameToCollection(event)}>
+                {container.map(obj => {
+                    return (
+                        <div className="form-check" key={obj._id}>
+                            <input className="form-check-input" type="checkbox" id={obj._id} value={obj._id} />
+                            <label htmlFor={obj._id}>{obj.name}</label>
+                        </div>
+                    );
+                })}
+                <button className="btn btn-secondary w-100" type="submit">Add to Collection</button>
+            </form>
+        </div>
     }
 
     render() {
@@ -61,7 +98,6 @@ class Show extends Component {
                                     <div className="col-md-5 col-sm-12 d-flex justify-content-center mt-3 pt-3">
                                         <div>
                                             <img className="d-flex" src={`//images.igdb.com/igdb/image/upload/t_cover_big/${result.cover.cloudinary_id}.jpg`} alt="" />
-                                            {this.renderAddToCollction()}
                                         </div>
                                     </div>
                                     <div className="col-md-7 col-sm-12">
@@ -70,17 +106,12 @@ class Show extends Component {
                                             <h5 className="muted game-name">{new Date(result.first_release_date).toLocaleDateString()}</h5>
                                         </div>
                                         <div className="game-show-info">
-                                            <h5 className="pb-3">Genre: {result.genres.map(genre => {
-                                                return <span key={genre.id} className="ml-2">{genre.name}</span>;
-                                            })}</h5>
-                                            <h5 className="pb-3">Consoles: {result.platforms.map(platform => {
-                                                return <span key={platform.id} className="ml-2">{platform.name}</span>;
-                                            })}</h5>
                                             <div>
                                                 <p id="read-more-summary">{result.summary}</p>
                                                 <span className="text-success" id="game-show-summary-toggle" onClick={this.expandSummary}>Read More</span>
                                             </div>
                                         </div>
+                                        {this.renderAddToCollction()}
                                     </div>
                                 </div>
                             </div>
@@ -96,4 +127,4 @@ function mapStateToProps(state) {
     return { result: state.selectedGame, auth: state.auth };
 }
 
-export default withRouter(connect(mapStateToProps, { setGameShow })(Show));
+export default withRouter(connect(mapStateToProps, { setGameShow, fetchUser })(Show));

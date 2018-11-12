@@ -9,18 +9,35 @@ import Collections from './containers/Collections/Collections';
 
 class AuthRoutes extends Component {
 
-    // componentDidMount = () => {
-    //     this.props.fetchCollections();
-    // }
+    state = {
+        show: null
+    }
+
+    updateDimensions() {
+        if (window.innerWidth >= 767) {
+            this.setState({ show: true });
+        } else {
+            this.setState({ show: false });
+        }
+    }
+
+    componentDidMount() {
+        this.updateDimensions();
+        window.addEventListener("resize", () => this.updateDimensions());
+    }
+
+    componentWillUnmount = () => {
+        window.removeEventListener("resize", () => this.updateDimensions());
+    }
 
     render() {
         return (
             <div className="container-fluid main h-100">
                 <div className="row h-100">
-                    <div className="col-sm-2 col-xs-12 mx-0 px-0">
-                        <SideBar {...this.props}/>
+                    <div className="col-md-2 col-xs-12 mx-0 px-0">
+                        {this.state.show ? <SideBar {...this.props} /> : null}
                     </div>
-                    <div className="col-sm-10 col-xs-12 mt-4 px-4 h-100">
+                    <div className="col-md-10 col-xs-12 mt-4 px-4 h-100">
                         <Route path="/users/dashboard" component={Dashboard} {...this.props} />
                         <Route path="/users/collections/:id/:console" component={Collections} {...this.props} collections={this.props.collections} />
                     </div>

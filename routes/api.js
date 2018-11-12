@@ -16,7 +16,7 @@ router.get('/search', (req, res) => {
             'game-not_exists': 'true',
             'cover-exists': 'true'
         },
-        limit: 50,
+        limit: 25,
         search: req.query.keyword
     }, [
         'name',
@@ -95,7 +95,7 @@ router.get('/get_game_list', (req, res) => {
             'game-not_exists': 'true',
             'cover-exists': 'true'
         },
-        limit: 50,
+        limit: 25,
         offset: req.query.offset,
         order: 'name:asc'
     }, [
@@ -122,15 +122,48 @@ router.delete('/delete_collection', (req, res) => {
     });
 });
 
-router.get('/current_user', (req, res) => {
-    User.findOne({ googleID: req.user.googleID }).populate({
-        path: 'collections',
-        populate: {
-            path: 'gamesCollected'
-        }
-    }).exec((err, user) => {
-        res.json(user);
+router.post('/addGameToCollections', (req, res) => {
+    console.log(req.body.game);
+    const addToCollection = async (id) => {
+        await Collection.findOne({ _id: id }, (err, collection) => {
+            if (err) {
+                console.log(err);
+            } else {
+                const isTrue = collection.gamesCollected.some(item => {
+                    if (item.id === req.body.game.id) {
+                        return true;
+                    }
+                });
+                if (isTrue) {
+                    return;
+                }
+                const game = {...req.body.game};
+                collection.gamesCollected.push(game);
+                collection.save();
+            }
+        });
+    }
+
+    const ids = req.body.ids;
+    ids.forEach(function(id) {
+        addToCollection(id);
     });
+    res.end();
+});
+
+router.get('/current_user', async (req, res) => {
+    console.log(req.user);
+    if (req.user) {
+        const user = await User.findOne({ googleID: req.user.googleID }).populate({
+            path: 'collections',
+            populate: {
+                path: 'gamesCollected'
+            }
+        });
+        res.json(user)
+    } else {
+        res.send(req.user);
+    }
 });
 
 router.get('/logout', (req, res) => {

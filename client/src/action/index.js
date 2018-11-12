@@ -6,6 +6,7 @@ import {
         FETCH_GAME,
         FETCH_GAME_LIST,
         ADD_TO_GAME_LIST,
+        PUSH_GAME,
         SET_USER,
         SET_SEARCH_REDIRECT,
         SET_SHOW_COLLECTION,
@@ -39,7 +40,6 @@ export const addToGameList = (id, offset) => async dispatch => {
 }
 export const fetchCollections = () => async dispatch => {
     const res = await axios.get('/api/fetch_user')
-        console.log("secondary");
                 dispatch({ type: SET_USER, payload: res.data });
 
 }
@@ -69,5 +69,13 @@ export const hideModal = (type) => async dispatch => {
         type: HIDE_MODAL,
         modalType: type
     });
-}   
+} 
+
+export const pushGameToCollections = (ids, game) => async dispatch => {
+    dispatch({
+        type: PUSH_GAME,
+        game: game,
+        ids: ids
+    });
+}
 

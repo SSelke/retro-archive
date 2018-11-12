@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { fetchGameList,
          addToGameList,
          setShowCollection, 
          fetchUser,
          setGameShow } from '../../action';
-
+import { Nav, NavItem, NavLink } from 'reactstrap';
+import classnames from 'classnames';
 import _ from 'lodash';
 import Spinner from '../../components/UI/Spinner';
 import axios from 'axios';
@@ -13,7 +14,16 @@ import axios from 'axios';
 class Collections extends Component {
 
     state = {
-        offset: 0
+        offset: 0,
+        activeTab: 'collected'
+    }
+
+    toggle = (tab) => {
+        if (this.state.activeTab !== tab) {
+            this.setState({
+                activeTab: tab
+            });
+        }
     }
 
     componentDidMount = () => { 
@@ -43,11 +53,19 @@ class Collections extends Component {
     }
 
     renderCol = (game) => {
-        return <div className="col-md-3 col-xs-12" key={game.id}>
+        const date = new Date(game.first_release_date).toLocaleDateString();
+        return <div className="col-lg-4 col-md-12" key={game.id}>
             <div className="jumbotron">
                 <div className="mb-3" onClick={() => { this.showGame(game.id) }}>
-                    <img src={game.cover.url} className="d-inline-block" alt="" />
-                    <h5 className="d-inline-block ml-2 text-nowrap">{game.name}</h5>
+                    <div className="row">
+                        <div className="col-md-4 col-xs-12 d-flex justify-content-center">
+                            <img src={game.cover.url} alt="" />
+                        </div>
+                        <div className="col-md-8 col-xs-12 text-center mt-4">
+                            <h5>{game.name}</h5>
+                            <p className="text-muted">{date}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -55,10 +73,8 @@ class Collections extends Component {
 
     addGames = () => {
         const offset = this.state.offset + 1;
-        console.log("hit");
         this.setState({offset}, () => {
-            const offset = this.state.offset * 50;
-            console.log(offset);
+            const offset = this.state.offset * 25;
             this.props.addToGameList(this.props.collection.id, offset);
         });
     }
@@ -76,7 +92,8 @@ class Collections extends Component {
         } 
 
         const { collection } = this.props;
-        const groups = _.chunk(this.props.games, 4)
+        const groups = _.chunk(collection.gamesCollected, 3);
+        const list = _.chunk(this.props.games, 3);
 
         return (
             <div className="container-fluid h-100 my-4" style={{ minHeight: '100vh' }}>
@@ -97,10 +114,35 @@ class Collections extends Component {
                         </div>
                     </div>
                 </div>
-                { groups.map((e) => this.renderRow(e))}
-                <div>
-                    <button className="btn btn-secondary w-100 mb-5" onClick={this.addGames}>More Games</button>
+                <div className="mb-5">
+                    <Nav tabs>
+                        <NavItem>
+                            <NavLink
+                                className={classnames({ active: this.state.activeTab === 'collected' })}
+                                onClick={() => { this.toggle('collected'); }}
+                                >
+                                Collected Games
+                            </NavLink>
+                        </NavItem>
+                        <NavItem>
+                            <NavLink
+                                className={classnames({ active: this.state.activeTab === 'list' })}
+                                onClick={() => { this.toggle('list'); }}
+                                >
+                                Games List
+                            </NavLink>
+                        </NavItem>
+                    </Nav>
                 </div>
+                {
+                    this.state.activeTab === "collected" ? 
+                        groups.map((e) => this.renderRow(e)) : <Fragment>
+                            {list.map((e) => this.renderRow(e))}
+                            <div>
+                                <button className="btn btn-secondary w-100 mb-5" onClick={this.addGames}>More Games</button>
+                            </div>
+                        </Fragment>
+                }
             </div>
         );
     }
@@ -119,3 +161,4 @@ export default connect(mapStateToProps, {
                                             fetchUser,
                                             setGameShow }
                         )(Collections);
+

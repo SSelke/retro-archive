@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { fetchSearchResults } from '../../action';
+import { fetchSearchResults, setShowCollection, fetchGameList, showModal } from '../../action';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
+import _ from 'lodash';
 import './Header.css';
 import {
     Collapse,
@@ -25,7 +26,6 @@ class Header extends Component {
 
     toggle() {
         if (window.innerWidth >= 767) {
-            console.log(window.innerWidth);
             return;
         }
         this.setState({
@@ -34,7 +34,7 @@ class Header extends Component {
     }
 
     renderNav = () => {
-        switch (this.props.isLoggedIn) {
+        switch (this.props.auth) {
             case null:
                 return 'Loading...';
             case false:
@@ -45,7 +45,7 @@ class Header extends Component {
     }
 
     renderButton = () => {
-        switch (this.props.isLoggedIn) {
+        switch (this.props.auth) {
             case null:
                 return 'Loading...';
             default:
@@ -62,9 +62,32 @@ class Header extends Component {
             return;
         }
         this.props.fetchSearchResults(keyword, () => {
-            console.log(keyword);
             this.props.history.push(`/search/${keyword}`);
         });
+    }
+
+    setStore = async (collection) => {
+        this.toggle();
+        await this.setCollection(collection);
+        await this.props.fetchGameList(collection.id);
+        this.props.history.push(`/users/collections/${collection._id}/${collection.id}`);
+    }
+
+    renderCollections = () => {
+        let collections = null;
+        collections = _.mapKeys(this.props.auth.collections, "_id");
+        return _.map(collections, (collection) => {
+            return <NavItem key={collection._id} className="my-2 text-white" onClick={() => this.setStore(collection)}>{collection.name}</NavItem>;
+        });
+    }
+
+    setCollection = (collection) => {
+        this.props.setShowCollection(collection);
+    }
+
+    addCollection = () => {
+        this.toggle();
+        this.props.showModal("ADD_COLLECTION");
     }
 
     render() {
@@ -91,6 +114,11 @@ class Header extends Component {
                                     {this.renderButton()}
                                 </div>
                             </NavItem>
+                            { this.props.auth ? <div className="text-white header-collections">
+                                    <h5 className="mb-3"><em>My Collections</em></h5>
+                                    {this.renderCollections()}
+                                    <NavItem className="my-2" onClick={this.addCollection}><span>New Collection</span></NavItem>
+                                </div> : null }
                         </Nav>
                     </Collapse>
                 </Navbar>
@@ -100,10 +128,10 @@ class Header extends Component {
 }
 
 function mapStateToProps(state) {
-    return {isLoggedIn: state.auth, term: state.term};
+    return {auth: state.auth, term: state.term};
 }
 
-export default withRouter(connect(mapStateToProps, { fetchSearchResults })(Header));  
+export default withRouter(connect(mapStateToProps, { fetchSearchResults, showModal, setShowCollection, fetchGameList })(Header));  
 
 // <div className="container p-0">
 //     <header className="py-3 web-header mb-4">

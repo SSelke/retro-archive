@@ -16,3 +16,9 @@
     height: 2.75rem;
     overflow-y: hidden;
 }
+
+@media(min-width: 766px) {
+    .header-collections {
+        display: none;
+    }
+}
