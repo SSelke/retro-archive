@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { fetchCollections } from '../../action';
 import { connect } from 'react-redux';
 import CircularProgressbar from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import './Dashboard.css';
 
 class Dashboard extends Component {
-
-    // componentDidMount = () => {
-    //     this.props.fetchCollections();
-    // }
 
     render() {
         const SNESpercentage = 23;
@@ -101,4 +96,4 @@ function mapStateToProps(state) {
     return { auth: state.auth }
 }
 
-export default withRouter(connect(mapStateToProps, { fetchCollections })(Dashboard));
+export default withRouter(connect(mapStateToProps)(Dashboard));

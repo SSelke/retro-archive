@@ -53,7 +53,7 @@ class Header extends Component {
         }
     }
 
-    onFormSubmit = (event) => {
+    onFormSubmit = async (event) => {
         event.preventDefault();
 
         // //fetch search data & redirect
@@ -61,9 +61,8 @@ class Header extends Component {
         if (!keyword) {
             return;
         }
-        this.props.fetchSearchResults(keyword, () => {
-            this.props.history.push(`/search/${keyword}`);
-        });
+        await this.props.fetchSearchResults(keyword);
+        this.props.history.push(`/search/${keyword}`);
     }
 
     setStore = async (collection) => {
@@ -132,23 +131,3 @@ function mapStateToProps(state) {
 }
 
 export default withRouter(connect(mapStateToProps, { fetchSearchResults, showModal, setShowCollection, fetchGameList })(Header));  
-
-// <div className="container p-0">
-//     <header className="py-3 web-header mb-4">
-//         <div className="row flex-nowrap justify-content-between align-items-center">
-//             <div className="col-4 pt-1">{this.renderButton()}</div>
-//             <div className="col-4 text-center"><Link className="web-brand text-dark" to='/'><strong>Retro Archive</strong></Link></div>
-//             <div className="col-4 pt-1 d-flex justify-content-end">
-//                 <form className="mr-3" onSubmit={this.onFormSubmit}>
-//                     <div className="input-group">
-//                         <input type="text" className="form-control" placeholder="Search for a game" id="search-form" />
-//                         <div className="input-group-append">
-//                             <button className="btn btn-outline-secondary" type="submit">Search</button>
-//                         </div>
-//                     </div>
-//                 </form>
-//                 {this.renderNav()}
-//             </div>
-//         </div>
-//     </header>
-// </div>

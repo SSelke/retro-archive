@@ -40,6 +40,7 @@ class Show extends Component {
         });
         await axios.post("/api/addGameToCollections", { ids: values, game: this.props.result});
         this.props.fetchUser();
+        this.props.history.push(`/users/dashboard`);
     }
 
     renderAddToCollction = () => {

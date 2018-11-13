@@ -30,9 +30,9 @@ class Search extends Component {
     }
 
     showGame = (id) => {
-        this.props.setGameShow(id, () => {
-            this.props.history.push(`/games/${id}`);
-        });
+        this.props.setGameShow(id);
+        console.log("hit");
+        this.props.history.push(`/games/${id}`);
     }
 
     render() {

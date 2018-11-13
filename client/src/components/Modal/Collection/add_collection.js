@@ -64,12 +64,12 @@ class addCollection extends Component {
                         <form onSubmit={this.submitForm}>
                             <div className="form-group">
                                 <label htmlFor="console_name">Collection Name</label>
-                                <input type="text" className="form-control" id="console_name" />
+                                <input type="text" className="form-control" id="console_name" required/>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="console_manu">Console Generation</label>
-                                <select defaultValue="Eg. Nintendo" id="console_manu" className="form-control" onChange={this.setConsoles}>
-                                    <option>Eg. Nintendo</option>
+                                <select defaultValue="Eg. Nintendo" id="console_manu" className="form-control" onChange={this.setConsoles} required>
+                                    <option disabled>Eg. Nintendo</option>
                                     <option>Atari</option>
                                     <option>Nintendo</option>
                                     <option>Sega</option>
@@ -79,7 +79,7 @@ class addCollection extends Component {
                             </div>
                             <div className="form-group">
                                 <label htmlFor="console_select">Select Console</label>
-                                <select multiple className="form-control" id="console_select">
+                                <select defaultValue="Select a console" className="form-control" id="console_select" required>
                                     {this.renderConsoles()}
                                 </select>
                             </div>

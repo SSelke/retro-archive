@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchCollections } from './action';
 import { Route } from 'react-router-dom';
 import SideBar from './containers/partials/SideBar';
 import Dashboard from './containers/Dashboard/Dashboard';
@@ -49,4 +48,4 @@ class AuthRoutes extends Component {
 
 const mapStateToProps = state => ({ collections: state.collections})
 
-export default connect(mapStateToProps, { fetchCollections })(AuthRoutes);
+export default connect(mapStateToProps)(AuthRoutes);

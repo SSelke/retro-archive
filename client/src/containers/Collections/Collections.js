@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { fetchGameList,
+         deleteCollection,
+         pullGame,
          addToGameList,
          setShowCollection, 
          fetchUser,
@@ -10,6 +12,7 @@ import classnames from 'classnames';
 import _ from 'lodash';
 import Spinner from '../../components/UI/Spinner';
 import axios from 'axios';
+import "./Collections.css";
 
 class Collections extends Component {
 
@@ -27,7 +30,7 @@ class Collections extends Component {
     }
 
     componentDidMount = () => { 
-        if (!this.props.collection || this.props.auth.collections) {
+        if (!this.props.collection) {
             this.renderOnRefresh();
         }
     }
@@ -42,17 +45,22 @@ class Collections extends Component {
 
     deleteCollection = async () => {
         axios.delete(`/api/delete_collection?id=${this.props.collection._id}&userID=${this.props.auth.googleID}`);
+        this.props.deleteCollection(this.props.collection._id);
         this.props.history.push(`/users/dashboard`);
-        this.props.fetchUser()
     }
 
-    renderRow = (group) => {
+    deleteGame = async (id) => {
+        this.props.pullGame(id, this.props.collection._id);
+        await axios.delete(`/api/delete_game?id=${id}&collectionID=${this.props.collection._id}`);
+    }
+
+    renderRow = (group, button) => {
         return <div className="row" key={group[0].id + 1}>
-            {group.map((e) => this.renderCol(e))}
+            {group.map((e) => this.renderCol(e, button))}
         </div>
     }
 
-    renderCol = (game) => {
+    renderCol = (game, button) => {
         const date = new Date(game.first_release_date).toLocaleDateString();
         return <div className="col-lg-4 col-md-12" key={game.id}>
             <div className="jumbotron">
@@ -67,6 +75,7 @@ class Collections extends Component {
                         </div>
                     </div>
                 </div>
+                {button ? <div className="delete-game d-flex justify-content-center align-items-center" onClick={() => this.deleteGame(game._id)}><span className="m-0 p-0 text-white"><strong>X</strong></span></div> : null}
             </div>
         </div>
     }
@@ -99,18 +108,14 @@ class Collections extends Component {
             <div className="container-fluid h-100 my-4" style={{ minHeight: '100vh' }}>
                 <div className="row">
                     <div className="col">
-                        <div className="jumbotron">
-                            <h1>{collection.name}</h1>
-                            <button onClick={this.deleteCollection}>Delete Collection</button>
-                        </div>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col">
-                        <div className="jumbotron">
-                            <div>Xbox</div>
-                            <div>Xbox 360</div>
-                            <div>Xbox One</div>
+                        <div className="jumbotron d-flex justify-content-center align-items-center">
+                            <div className="w-100">
+                                <h1>{collection.name}</h1>
+                                <h5 className="text-muted">{collection.type}</h5>
+                            </div>
+                            <div className="w-100"> 
+                                <button onClick={this.deleteCollection} className="btn btn-danger float-right">Delete Collection</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -136,7 +141,7 @@ class Collections extends Component {
                 </div>
                 {
                     this.state.activeTab === "collected" ? 
-                        groups.map((e) => this.renderRow(e)) : <Fragment>
+                        groups.map((e) => this.renderRow(e, "button")) : <Fragment>
                             {list.map((e) => this.renderRow(e))}
                             <div>
                                 <button className="btn btn-secondary w-100 mb-5" onClick={this.addGames}>More Games</button>
@@ -158,7 +163,9 @@ export default connect(mapStateToProps, {
                                             fetchGameList,  
                                             addToGameList,
                                             setShowCollection,
+                                            deleteCollection,
                                             fetchUser,
+                                            pullGame,
                                             setGameShow }
                         )(Collections);
 

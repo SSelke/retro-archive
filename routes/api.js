@@ -6,10 +6,9 @@ const mongoose = require('mongoose');
 const Collection = mongoose.model('collection');
 const User = mongoose.model('users');
 
-const client = igdb(keys.igdbKey)
+const client = igdb(keys.igdbKey);
 
 router.get('/search', (req, res) => {
-    console.log(req.user, "Search");
     client.games({
         filters: {
             'first_release_date-exists': "true",
@@ -39,7 +38,6 @@ router.get('/find_game', (req, res) => {
     }).then(response => {
             res.send(response.body);
     }).catch(e => {
-        console.log(e);
         res.send(e);
     });
 });
@@ -122,8 +120,12 @@ router.delete('/delete_collection', (req, res) => {
     });
 });
 
+router.delete('/delete_game', async (req, res) => {
+    await Collection.findOneAndUpdate({_id: req.query.collectionID}, {$pull: {gamesCollected: {_id: req.query.id}}});
+    res.end();
+});
+
 router.post('/addGameToCollections', (req, res) => {
-    console.log(req.body.game);
     const addToCollection = async (id) => {
         await Collection.findOne({ _id: id }, (err, collection) => {
             if (err) {
@@ -152,7 +154,6 @@ router.post('/addGameToCollections', (req, res) => {
 });
 
 router.get('/current_user', async (req, res) => {
-    console.log(req.user);
     if (req.user) {
         const user = await User.findOne({ googleID: req.user.googleID }).populate({
             path: 'collections',

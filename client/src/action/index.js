@@ -7,7 +7,8 @@ import {
         FETCH_GAME_LIST,
         ADD_TO_GAME_LIST,
         PUSH_GAME,
-        SET_USER,
+        DELETE_GAME,
+        DELETE_COLLECTION,
         SET_SEARCH_REDIRECT,
         SET_SHOW_COLLECTION,
         SHOW_MODAL,
@@ -20,9 +21,8 @@ export const fetchUser = () => async dispatch => {
     dispatch({ type: FETCH_USER, payload: res.data});
 };
 
-export const fetchSearchResults = (keyword, callback) => async dispatch => {
+export const fetchSearchResults = (keyword) => async dispatch => {
     const res = await axios.get(`/api/search?keyword=${keyword}`)
-                callback()
                 dispatch({ type: FETCH_RESULTS, payload: res.data })
                 dispatch({ type: FETCH_TERM, payload: keyword });
 
@@ -37,11 +37,6 @@ export const fetchGameList = (id) => async dispatch => {
 export const addToGameList = (id, offset) => async dispatch => {
     const res = await axios.get(`/api/get_game_list?id=${id}&offset=${offset}`)
                 dispatch({ type: ADD_TO_GAME_LIST, payload: res.data });
-}
-export const fetchCollections = () => async dispatch => {
-    const res = await axios.get('/api/fetch_user')
-                dispatch({ type: SET_USER, payload: res.data });
-
 }
 
 export const setShowCollection = (collection) => async dispatch =>  {
@@ -76,6 +71,21 @@ export const pushGameToCollections = (ids, game) => async dispatch => {
         type: PUSH_GAME,
         game: game,
         ids: ids
+    });
+}
+
+export const deleteCollection = (id) => async dispatch => {
+    dispatch({
+        type: DELETE_COLLECTION,
+        payload: id
+    });
+}
+
+export const pullGame = (id, collection_id) => async dispatch => {
+    dispatch({
+        type: DELETE_GAME,
+        game_id: id,
+        collection_id
     });
 }
 
