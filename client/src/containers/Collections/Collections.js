@@ -54,6 +54,17 @@ class Collections extends Component {
         await axios.delete(`/api/delete_game?id=${id}&collectionID=${this.props.collection._id}`);
     }
 
+    renderCollected = (groups) => {
+        if (groups.length === 0) {
+            return <div className="bg-dark rounded text-white text-center p-5">
+                <h3>Empty collections are sad collections :(</h3>
+                <p>To get started with your collection you can either click on the games list tab to explore all available games, or simply search for a game that you would like to add.</p>
+            </div>
+        } else {
+            return groups.map((e) => this.renderRow(e, "button"));
+        }
+    }
+
     renderRow = (group, button) => {
         return <div className="row" key={group[0].id + 1}>
             {group.map((e) => this.renderCol(e, button))}
@@ -67,7 +78,7 @@ class Collections extends Component {
                 <div className="mb-3" onClick={() => { this.showGame(game.id) }}>
                     <div className="row">
                         <div className="col-md-4 col-xs-12 d-flex justify-content-center">
-                            <img src={game.cover.url} alt="" />
+                            <img src={game.cover.url} height="96" alt="" />
                         </div>
                         <div className="col-md-8 col-xs-12 text-center mt-4">
                             <h5>{game.name}</h5>
@@ -114,7 +125,7 @@ class Collections extends Component {
                                 <h5 className="text-muted">{collection.type}</h5>
                             </div>
                             <div className="w-100"> 
-                                <button onClick={this.deleteCollection} className="btn btn-danger float-right">Delete Collection</button>
+                                <button onClick={this.deleteCollection} className="btn btn-danger btn-small float-right">Delete Collection</button>
                             </div>
                         </div>
                     </div>
@@ -141,7 +152,7 @@ class Collections extends Component {
                 </div>
                 {
                     this.state.activeTab === "collected" ? 
-                        groups.map((e) => this.renderRow(e, "button")) : <Fragment>
+                        this.renderCollected(groups) : <Fragment>
                             {list.map((e) => this.renderRow(e))}
                             <div>
                                 <button className="btn btn-secondary w-100 mb-5" onClick={this.addGames}>More Games</button>

@@ -43,10 +43,9 @@ export const setShowCollection = (collection) => async dispatch =>  {
     dispatch({ type: SET_SHOW_COLLECTION, payload: collection });
 }
 
-export const setGameShow = (id, callback) => async dispatch => {
+export const setGameShow = (id) => async dispatch => {
     console.log(id);
     const res = await axios.get(`/api/find_game?id=${id}`)
-                callback()
                 dispatch({ type: SET_SEARCH_REDIRECT, payload: res.data});
                 dispatch({ type: FETCH_GAME, payload: res.data});
 }

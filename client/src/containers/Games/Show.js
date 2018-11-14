@@ -11,7 +11,7 @@ class Show extends Component {
     componentDidMount = () => {
         const { id } = this.props.match.params;
         if (!this.props.result) {
-            this.props.setGameShow(id, () => {});
+            this.props.setGameShow(id);
         }
     }
 
