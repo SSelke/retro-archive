@@ -7,7 +7,6 @@ import gameReducer from './reducer_game';
 import collectionReducer from './reducer_collection';
 import gameListReducer from './reducer_game_list';
 import modal from './reducer_modal';
-import userReducer from './reducer_user';
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -17,8 +16,7 @@ const rootReducer = combineReducers({
     selectedGame: gameReducer,
     gameList: gameListReducer,
     collection: collectionReducer,
-    modal: modal,
-    user: userReducer
+    modal: modal
 });
 
 export default rootReducer;

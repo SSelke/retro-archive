@@ -99,10 +99,9 @@ class Collections extends Component {
         });
     }
 
-    showGame = (id) => {
-        this.props.setGameShow(id, () => {
-            this.props.history.push(`/games/${id}`);
-        });
+    showGame = async (id) => {
+        await this.props.setGameShow(id);
+        this.props.history.push(`/games/${id}`);
     }
 
     render() {
