@@ -5,6 +5,7 @@ const cookieSession = require('cookie-session');
 const passport = require('passport');
 const keys = require('./config/keys');
 const bodyParser = require('body-parser');
+const app = express();
 require('./models/User');
 require('./models/Collection');
 require('./services/passport');
@@ -13,11 +14,9 @@ const authRouter = require('./routes/auth');
 const apiRouter = require('./routes/api');
 const searchRouter = require('./routes/search');
 
-mongoose.connect(keys.mongoURI);
-
-const app = express();
-app.use(bodyParser.json());
+mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.use(
   cookieSession({

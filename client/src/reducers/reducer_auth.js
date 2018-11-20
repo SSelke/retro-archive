@@ -1,10 +1,31 @@
-import { FETCH_USER, DELETE_COLLECTION, DELETE_GAME } from '../action/types';
+import { FETCH_USER, DELETE_COLLECTION, DELETE_GAME, DELETE_RECENT_GAMES, UPDATE_RECENT_GAMES, ADD_TO_GAME_COLLECTION } from '../action/types';
 import _ from 'lodash';
 
 export default function(state = null, action) {
     switch (action.type) {
         case FETCH_USER:
             return action.payload || false;
+        case UPDATE_RECENT_GAMES:
+            let updateState = {
+                ...state
+            }
+            if (updateState.recentGames.length >= 5) {
+                updateState.recentGames.shift();
+            }
+            updateState.recentGames.push(action.payload);
+            return updateState;
+        case ADD_TO_GAME_COLLECTION: 
+            let addGameState = {
+                ...state
+            };
+            action.ids.forEach( id => {
+                addGameState.collections.forEach(collection => {
+                    if (id === collection._id) {
+                        collection.gamesCollected.push(action.game);
+                    }
+                });
+            });
+            return addGameState;
         case DELETE_COLLECTION:
             let newData = {
                 ...state
@@ -27,6 +48,12 @@ export default function(state = null, action) {
                 }
             });
             return gameData;
+        case DELETE_RECENT_GAMES:
+            let newState = {
+                ...state,
+                recentGames: []
+            }
+            return newState;
         default:
             return state;
     }

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { fetchSearchResults, setShowCollection, fetchGameList, showModal } from '../../action';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
@@ -9,7 +9,11 @@ import {
     Navbar,
     NavbarToggler,
     Nav,
-    NavItem
+    NavItem,
+    UncontrolledDropdown,
+    DropdownItem, 
+    DropdownToggle, 
+    DropdownMenu
 } from 'reactstrap';
 
 
@@ -25,31 +29,10 @@ class Header extends Component {
     }
 
     toggle() {
-        if (window.innerWidth >= 767) {
-            return;
-        }
-        this.setState({
-            isOpen: !this.state.isOpen
-        });
-    }
-
-    renderNav = () => {
-        switch (this.props.auth) {
-            case null:
-                return 'Loading...';
-            case false:
-                return <a className="btn btn-info" href="/auth/google" onClick={this.toggle}>Sign In</a>;
-            default:
-                return <a className="btn btn-danger" href="/api/logout" onClick={this.toggle}>Logout</a>;
-        }
-    }
-
-    renderButton = () => {
-        switch (this.props.auth) {
-            case null:
-                return 'Loading...';
-            default:
-                return <a className="btn btn-secondary" href="/users/dashboard" onClick={this.toggle}>Dashboard</a>;
+        if (window.innerWidth <= 767) {
+            this.setState({
+                isOpen: !this.state.isOpen
+            });
         }
     }
 
@@ -67,37 +50,64 @@ class Header extends Component {
 
     setStore = async (collection) => {
         this.toggle();
-        await this.setCollection(collection);
+        await this.props.setShowCollection(collection);
         await this.props.fetchGameList(collection.id);
         this.props.history.push(`/users/collections/${collection._id}/${collection.id}`);
     }
 
-    renderCollections = () => {
-        let collections = null;
-        collections = _.mapKeys(this.props.auth.collections, "_id");
-        return _.map(collections, (collection) => {
-            return <NavItem key={collection._id} className="my-2 text-white" onClick={() => this.setStore(collection)}>{collection.name}</NavItem>;
-        });
-    }
-
-    setCollection = (collection) => {
-        this.props.setShowCollection(collection);
-    }
-
     addCollection = () => {
-        this.toggle();
         this.props.showModal("ADD_COLLECTION");
+    }
+
+    setStore = async (collection) => {
+        await this.props.setShowCollection(collection);
+        await this.props.fetchGameList(collection.id);
+        this.props.history.push(`/users/collections/${collection._id}/${collection.id}`);
+    }
+
+    isUser = () => {
+        if (this.props.auth) {
+            return <Fragment>
+                <UncontrolledDropdown nav inNavbar className="my-3 mx-2">
+                    <DropdownToggle nav caret>
+                        Collections
+                                </DropdownToggle>
+                    <DropdownMenu right>
+                        {this.props.auth.collections.map(collection => {
+                            return <DropdownItem onClick={() => this.setStore(collection)} key={collection._id}>
+                                {collection.name}
+                            </DropdownItem>
+                        })}
+                        <DropdownItem divider />
+                        <DropdownItem onClick={this.addCollection}>
+                            New Collection
+                        </DropdownItem>
+                    </DropdownMenu>
+                </UncontrolledDropdown>
+                <NavItem className="my-3 mx-2">
+                    <div className="btn-group" role="group">
+                        <Link className="btn btn-secondary" to="/users/dashboard" onClick={this.toggle}>Dashboard</Link>
+                        <Link className="btn btn-secondary" to="/users/profile" onClick={this.toggle}>Profile</Link>
+                        <a className="btn btn-danger text-white" to="/api/logout" onClick={this.toggle}>Logout</a>
+                    </div>
+                </NavItem>
+            </Fragment>;
+        } else {
+            return <NavItem className="my-3 mx-2">
+                <a className="btn btn-info" href="/auth/google" onClick={this.toggle}>Sign In</a>
+            </NavItem>;
+        }
     }
 
     render() {
         return (
-            <div className="">
-                <Navbar color="dark" light expand="md">
+            <div>
+                <Navbar color="dark" dark expand="md">
                     <div className="text-center"><Link className="web-brand text-white" to='/'>Retro Archive</Link></div>
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>
-                            <NavItem className="my-3">
+                            <NavItem className="my-3 mx-2">
                                 <form className="mr-3" onSubmit={this.onFormSubmit}>
                                     <div className="input-group">
                                         <input type="text" className="form-control" placeholder="Search for a game" id="search-form" />
@@ -107,17 +117,7 @@ class Header extends Component {
                                     </div>
                                 </form>
                             </NavItem>
-                            <NavItem className="my-3">
-                                <div className="btn-group" role="group">
-                                    {this.renderNav()}
-                                    {this.renderButton()}
-                                </div>
-                            </NavItem>
-                            { this.props.auth ? <div className="text-white header-collections">
-                                    <h5 className="mb-3"><em>My Collections</em></h5>
-                                    {this.renderCollections()}
-                                    <NavItem className="my-2" onClick={this.addCollection}><span>New Collection</span></NavItem>
-                                </div> : null }
+                            {this.isUser()}
                         </Nav>
                     </Collapse>
                 </Navbar>

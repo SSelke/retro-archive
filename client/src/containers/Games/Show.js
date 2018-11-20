@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { setGameShow, fetchUser } from '../../action'; 
+import { setGameShow, fetchUser, updateRecentGames } from '../../action'; 
 import _ from 'lodash';
-import axios from 'axios';
 import './Show.css';
 
 class Show extends Component {
@@ -38,8 +37,8 @@ class Show extends Component {
         checkedValue.forEach((collection) => {
             values.push(collection.value);
         });
-        await axios.post("/api/addGameToCollections", { ids: values, game: this.props.result});
-        this.props.fetchUser();
+        await this.props.updateRecentGames(values, this.props.result);
+        await this.props.fetchUser();
         this.props.history.push(`/users/dashboard`);
     }
 
@@ -128,4 +127,4 @@ function mapStateToProps(state) {
     return { result: state.selectedGame, auth: state.auth };
 }
 
-export default withRouter(connect(mapStateToProps, { setGameShow, fetchUser })(Show));
+export default withRouter(connect(mapStateToProps, { setGameShow, fetchUser, updateRecentGames })(Show));

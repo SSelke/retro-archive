@@ -4,31 +4,38 @@ const Nintendo = {
     consoles: [
         {
             "id": 5,
-            "name": "Wii"
+            "name": "Wii",
+            gameCount: 979
         },
         {
             "id": 41,
-            "name": "Wii U"
+            "name": "Wii U",
+            gameCount: 1166
         },
         {
             "id": 4,
-            "name": "N64"
+            "name": "N64",
+            gameCount: 422
         },
         {
             "id": 130,
-            "name": "Switch"
+            "name": "Switch",
+            gameCount: 815
         },
         {
             "id": 21,
-            "name": "GameCube"
+            "name": "GameCube",
+            gameCount: 659
         },
         {
             "id": 18,
-            "name": "NES"
+            "name": "NES",
+            gameCount: 1449
         },
         {
             "id": 19,
-            "name": "SNES"
+            "name": "SNES",
+            gameCount: 1619
         }
     ]
 
@@ -39,15 +46,18 @@ const Xbox = {
     consoles: [
         {
             "id": 11,
-            "name": "Xbox"
+            "name": "Xbox",
+            gameCount: 954
         },
         {
             "id": 12,
-            "name": "Xbox 360"
+            "name": "Xbox 360",
+            gameCount: 1939
         },
         {
             "id": 49,
-            "name": "Xbox One"
+            "name": "Xbox One",
+            gameCount: 1876
         }
     ]
 }
@@ -57,27 +67,33 @@ const Sony = {
     consoles: [
         {
             "id": 7,
-            "name": "PlayStation"
+            "name": "PlayStation",
+            gameCount: 1731
         }, 
         {
             "id": 8,
-            "name": "PlayStation 2"
+            "name": "PlayStation 2",
+            gameCount: 2348
         },
         {
             "id": 9,
-            "name": "PlayStation 3"
+            "name": "PlayStation 3",
+            gameCount: 2326
         },
         {
             "id": 48,
-            "name": "PlayStation 4"
+            "name": "PlayStation 4",
+            gameCount: 2469
         },
         {
             "id": 38,
-            "name": "PSP"
+            "name": "PSP",
+            gameCount: 1076
         },
         {
             "id": 46,
-            "name": "PS Vita"
+            "name": "PS Vita",
+            gameCount: 798
         }
     ]
 }
@@ -87,23 +103,28 @@ const Atari = {
     consoles: [
         {
             "id": 66,
-            "name": "Atari 5200"
+            "name": "Atari 5200",
+            gameCount: 81
         },
         {
             "id": 59,
-            "name": "Atari 2600"
+            "name": "Atari 2600",
+            gameCount: 529
         },
         {
             "id": 60,
-            "name": "Atari 7800"
+            "name": "Atari 7800",
+            gameCount: 60
         },
         {
             "id": 61,
-            "name": "Atari Lynx"
+            "name": "Atari Lynx",
+            gameCount: 52
         },
         {
             "id": 62,
-            "name": "Atari Jaguar"
+            "name": "Atari Jaguar",
+            gameCount: 49
         }
     ]
 }
@@ -113,27 +134,33 @@ const Sega = {
     consoles: [
         {
             "id": 29,
-            "name": "Sega Genesis"
+            "name": "Sega Genesis",
+            gameCount: 941
         },
         {
             "id": 78,
-            "name": "Sega CD"
+            "name": "Sega CD",
+            gameCount: 200
         },
         {
             "id": 32,
-            "name": "Sega Saturn"
+            "name": "Sega Saturn",
+            gameCount: 36
         },
         {
             "id": 30,
-            "name": "Sega 32X"
+            "name": "Sega 32X",
+            gameCount: 405
         },
         {
             "id": 64,
-            "name": "Sega Master System"
+            "name": "Sega Master System",
+            gameCount: 305
         },
         {
             "id": 35,
-            "name": "Sega Game Gear"
+            "name": "Sega Game Gear",
+            gameCount: 309
         }
     ]
 }

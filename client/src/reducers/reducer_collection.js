@@ -1,5 +1,4 @@
 import { SET_SHOW_COLLECTION } from '../action/types';
-import _ from 'lodash';
 
 export default function (state = null, action) {
     switch (action.type) {

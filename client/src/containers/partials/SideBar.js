@@ -48,6 +48,9 @@ class SideBar extends Component {
             <div className="sidebar-nav h-100 bg-dark text-white" style={{ minHeight: '100vh' }}>
                 <ul className="sidebar-container mx-3 p-0">
                     <li className="sidebar-nav-item">
+                        <Link to='/users/profile'>Profile</Link>
+                    </li>
+                    <li className="sidebar-nav-item">
                         <h5><em>My Collections</em></h5>
                         <ul>
                             {this.renderCollections()}
@@ -65,7 +68,3 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, { fetchSearchResults, showModal, setShowCollection, fetchGameList })(SideBar);
-
-// <li className="sidebar-nav-item">
-//     <Link to='/users/profile/show'>Profile</Link>
-// </li>

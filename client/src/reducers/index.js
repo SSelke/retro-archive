@@ -6,10 +6,12 @@ import redirectReducer from './reducer_redirect';
 import gameReducer from './reducer_game';
 import collectionReducer from './reducer_collection';
 import gameListReducer from './reducer_game_list';
+import userReducer from './reducer_user';
 import modal from './reducer_modal';
 
 const rootReducer = combineReducers({
     auth: authReducer,
+    user: userReducer,
     search_results: searchResults,
     term: termReducer,
     redirect: redirectReducer,

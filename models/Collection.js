@@ -5,6 +5,7 @@ const collectionSchema = new Schema({
     type: String,
     name: String,
     id: String,
+    gameCount: String,
     gamesCollected: [
         {
             id: Number,

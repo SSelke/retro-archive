@@ -67,11 +67,13 @@ router.get('/get_collection', (req, res) => {
 });
 
 router.post('/save_collection', (req, res) => {
+    console.log(req.query.gameCount);
     async function saveCollection() {
         const collection = await new Collection({
             id: req.query.id,
             type: req.query.console,
             name: req.query.name,
+            gameCount: req.query.gameCount,
             gamesCollected: []
         }).save();
 
@@ -87,6 +89,7 @@ router.post('/save_collection', (req, res) => {
 });
 
 router.get('/get_game_list', (req, res) => {
+    console.log(req.query);
     client.games({
         filters: {
             'platforms-in': req.query.id,
@@ -109,18 +112,14 @@ router.get('/get_game_list', (req, res) => {
         });
 });
 
-router.delete('/delete_collection', (req, res) => {
-    Collection.findOneAndDelete({_id: req.query.id}, (err, doc) => {
-    });
-    User.findOneAndUpdate({ googleID: req.query.userID }, { $pull: { collections: req.query.id } }, (err, doc) => {
-        if (err) {
-            console.log(err);
-        } else {
-        }
-    });
+router.delete('/delete_collection', async (req, res) => {
+    await Collection.findOneAndDelete({_id: req.query.id});
+    await User.findOneAndUpdate({ googleID: req.query.userID }, { $set: { recentGames: [] } }, { $pull: { collections: req.query.id } });
+    res.end();
 });
 
 router.delete('/delete_game', async (req, res) => {
+    // User.findOneAndUpdate({ googleID: req.user.googleID }, {$pull: {recentGames: {_id: req.query.id}}});
     await Collection.findOneAndUpdate({_id: req.query.collectionID}, {$pull: {gamesCollected: {_id: req.query.id}}});
     res.end();
 });
@@ -151,6 +150,26 @@ router.post('/addGameToCollections', (req, res) => {
         addToCollection(id);
     });
     res.end();
+});
+
+router.post('/addGameToRecentlyAdded', (req, res) => {
+    const pushGame = async () => {
+        await User.findOne({ _id: req.user._id }, (err, user) => {
+            if (err) {
+                console.log(err);
+            } else {
+                if ( user.recentGames.length >= 5 ) {
+                    user.recentGames.shift();
+                }
+                user.recentGames.push(req.body.game);
+                user.save();
+                res.end();
+            }
+        });
+    }
+
+    pushGame();
+    
 });
 
 router.get('/current_user', async (req, res) => {

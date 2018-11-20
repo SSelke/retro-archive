@@ -8,13 +8,12 @@ export default function (ComposedComponent) {
     class Authenticate extends React.Component {
 
         componentDidMount() {
-            //whatever your action creator is called
             this.props.fetchUser();
         }
 
         renderAuth = () => {
             if (this.props.user || this.props.user === false) {
-                return <ComposedComponent {...this.props} />
+                return <ComposedComponent {...this.props}/>
             } else {
                 return <BrowserRouter><Header /></BrowserRouter>;
             }

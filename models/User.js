@@ -11,6 +11,18 @@ const userSchema = new Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "collection"
         }
+    ],
+    recentGames: [
+        {
+            id: Number,
+            name: String,
+            cover: {
+                url: String,
+                couldinary_id: String,
+                width: Number,
+                height: Number
+            }
+        }
     ]
 });
 

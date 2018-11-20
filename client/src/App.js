@@ -21,7 +21,7 @@ class App extends Component {
       <div className="App h-100">
         <BrowserRouter>
           <div>
-            <Header />
+            <Header/>
             <Switch>
               <Route path="/games/:id" component={ShowGame} />
               <Route path="/search/:keyword" component={SearchResults} />

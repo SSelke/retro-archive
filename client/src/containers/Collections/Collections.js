@@ -51,7 +51,6 @@ class Collections extends Component {
 
     deleteGame = async (id) => {
         this.props.pullGame(id, this.props.collection._id);
-        await axios.delete(`/api/delete_game?id=${id}&collectionID=${this.props.collection._id}`);
     }
 
     renderCollected = (groups) => {
@@ -68,7 +67,7 @@ class Collections extends Component {
     renderRow = (group, button) => {
         return <div className="row" key={group[0].id + 1}>
             {group.map((e) => this.renderCol(e, button))}
-        </div>
+        </div>;
     }
 
     renderCol = (game, button) => {

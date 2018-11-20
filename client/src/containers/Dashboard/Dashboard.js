@@ -1,91 +1,99 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { setGameShow, setShowCollection, fetchGameList } from '../../action';
 import CircularProgressbar from 'react-circular-progressbar';
+import _ from 'lodash';
 import 'react-circular-progressbar/dist/styles.css';
 import './Dashboard.css';
 
 class Dashboard extends Component {
 
-    render() {
-        const SNESpercentage = 23;
-        const N64percentage = 53;
-        const PS2percentage = 12;
+    renderRow = (group) => {
+        return <div className="row my-4" key={group[0].id + 1}>
+            {group.map((e) => this.renderCol(e))}
+        </div>;
+    }
 
+    renderCol = (collection) => {
+        return <div className="col-md-6 col-sm-12 m-0 p-0" key={collection.id}>
+            <div className="tile mx-auto d-flex align-items-center justify-content-center" onClick={() => this.setStore(collection)}>
+                <h3>{collection.name}</h3>
+            </div>
+        </div>
+    }
+    setStore = async (collection) => {
+        await this.props.setShowCollection(collection);
+        await this.props.fetchGameList(collection.id);
+        this.props.history.push(`/users/collections/${collection._id}/${collection.id}`);
+    }
+
+    renderPercentages = () => {
+        if (this.props.auth.collections.length === 0) {
+            return 'empty';
+        }
+        return this.props.auth.collections.map(collection => {
+            const percentage = ((Number(collection.gamesCollected.length) / Number(collection.gameCount)) * 100).toFixed(1);
+            return <div className="circle-container" key={collection._id}>
+                <h4>{collection.name}</h4>
+                <CircularProgressbar
+                    className="my-3"
+                    styles={{
+                        path: { width: '200px', height: 'auto' }
+                    }}
+                    percentage={percentage}
+                    text={`${percentage}%`}
+                />
+                <h5>Collected:</h5>
+                <h5>{`${collection.gamesCollected.length} / ${Number(collection.gameCount)}`}</h5>
+            </div>
+        });
+    }
+
+    renderRecentlyAdded = () => {
+        return <div className="col-md-12 col-xs-12 m-0 p-0">
+            <div className="jumbotron bg-dark text-white text-center">
+                <h2 className="mb-5">Recently Added Games</h2>
+                <table className="table bg-dark text-white">
+                    <tbody>
+                        {this.props.auth.recentGames.map( game => {
+                            return <tr key={game._id} onClick={() => { this.showGame(game.id) }}>
+                                <td className="p-0 w-100 d-flex justify-content-start">
+                                    <div className="my-3">
+                                        <img src={game.cover.url} className="d-inline-block" alt="" />
+                                        <h5 className="d-inline-block ml-2">{game.name}</h5>
+                                    </div>
+                                </td>
+                            </tr>
+                        })}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+
+    showGame = async (id) => {
+        await this.props.setGameShow(id);
+        this.props.history.push(`/games/${id}`);
+    }
+
+    render() {
+
+        const { collections } = this.props.auth;
+        let groups = null
+        groups = _.chunk(collections, 2);
         return (
             <div className="container-fluid h-100" style={{minHeight: '100vh'}}>
                 <div className="row h-100">
                     <div className="col m-0 mb-4 p-0">
                         <div className="jumbotron h-100 d-flex justify-content-around text-center">
-                            <div className="circle-container">
-                                <h4>SNES</h4>
-                                <CircularProgressbar
-                                    className="my-3"
-                                    styles={{
-                                        path: { width: '200px', height: 'auto' }
-                                    }}
-                                    percentage={SNESpercentage}
-                                    text='23%'
-                                />
-                                <h5>23 / 100 Collected</h5>
-                            </div>
-                            <div className="circle-container">
-                                <h4>N64</h4>
-                                <CircularProgressbar
-                                    className="my-3"
-                                    styles={{
-                                        path: { width: '200px', height: 'auto' }
-                                    }}
-                                    percentage={N64percentage}
-                                    text='53%'
-                                />
-                                <h5>53 / 100 Collected</h5>
-                            </div>
-                            <div className="circle-container">
-                                <h4>PS2</h4>
-                                <CircularProgressbar
-                                    className="my-3"
-                                    styles={{
-                                        path: { width: '200px', height: 'auto' }
-                                    }}
-                                    percentage={PS2percentage}
-                                    text='12%'
-                                />
-                                <h5>12 / 100</h5>
-                            </div>
+                            {this.renderPercentages()}
                         </div>
                     </div>
                 </div>
+                <div className="mt-2 mb-4">{groups.map((e) => this.renderRow(e))}</div>
                 <div className="row">
-                    <div className="col-md-6 col-xs-12 m-0 p-0">
-                        <div className="jumbotron bg-dark text-white text-center">
-                            <h2 className="mb-5">Recently Added Games</h2>
-                            <table className="table bg-dark text-white">
-                                <tbody>
-                                    <tr>
-                                        <th scope="row"><img src="//images.igdb.com/igdb/image/upload/t_thumb/f9jqwcudxcicbqgzx8tf.jpg" className="d-inline-block" alt="" /></th>
-                                        <td className="p-0 my-auto"><h5 className="d-inline-block ml-2">The Legend of Zelda: A Link to the Past</h5></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><img src="//images.igdb.com/igdb/image/upload/t_thumb/f9jqwcudxcicbqgzx8tf.jpg" className="d-inline-block" alt="" /></th>
-                                        <td className="p-0 my-auto"><h5 className="d-inline-block ml-2">The Legend of Zelda: A Link to the Past</h5></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><img src="//images.igdb.com/igdb/image/upload/t_thumb/f9jqwcudxcicbqgzx8tf.jpg" className="d-inline-block" alt="" /></th>
-                                        <td className="p-0 my-auto"><h5 className="d-inline-block ml-2">The Legend of Zelda: A Link to the Past</h5></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><img src="//images.igdb.com/igdb/image/upload/t_thumb/f9jqwcudxcicbqgzx8tf.jpg" className="d-inline-block" alt="" /></th>
-                                        <td className="p-0 my-auto"><h5 className="d-inline-block ml-2">The Legend of Zelda: A Link to the Past</h5></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><img src="//images.igdb.com/igdb/image/upload/t_thumb/f9jqwcudxcicbqgzx8tf.jpg" className="d-inline-block" alt="" /></th>
-                                        <td className="p-0 my-auto"><h5 className="d-inline-block ml-2">The Legend of Zelda: A Link to the Past</h5></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    {this.renderRecentlyAdded()}
                 </div>
             </div>
         );
@@ -96,4 +104,4 @@ function mapStateToProps(state) {
     return { auth: state.auth }
 }
 
-export default withRouter(connect(mapStateToProps)(Dashboard));
+export default withRouter(connect(mapStateToProps, { setGameShow, setShowCollection, fetchGameList })(Dashboard));
