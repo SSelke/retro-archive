@@ -88,7 +88,7 @@ class Header extends Component {
                     <div className="btn-group" role="group">
                         <Link className="btn btn-secondary" to="/users/dashboard" onClick={this.toggle}>Dashboard</Link>
                         <Link className="btn btn-secondary" to="/users/profile" onClick={this.toggle}>Profile</Link>
-                        <a className="btn btn-danger text-white" to="/api/logout" onClick={this.toggle}>Logout</a>
+                        <a className="btn btn-danger text-white" href="/api/logout" onClick={this.toggle}>Logout</a>
                     </div>
                 </NavItem>
             </Fragment>;
