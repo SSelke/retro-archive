@@ -16,9 +16,9 @@ class Dashboard extends Component {
     }
 
     renderCol = (collection) => {
-        return <div className="col-md-6 col-sm-12 m-0 p-0" key={collection.id}>
-            <div className="tile mx-auto d-flex align-items-center justify-content-center" onClick={() => this.setStore(collection)}>
-                <h3>{collection.name}</h3>
+        return <div className={`col-md-6 col-sm-12 p-0 my-4 ${this.props.auth.collections.length === 1 ? "mx-auto" : "m-0"}`} key={collection.id}>
+            <div className="tile mx-auto d-flex align-items-center justify-content-center" style={{backgroundColor: collection.color}} onClick={() => this.setStore(collection)}>
+                <img src={collection.url} height="124" width="124" />
             </div>
         </div>
     }
@@ -51,7 +51,7 @@ class Dashboard extends Component {
     }
 
     renderRecentlyAdded = () => {
-        return <div className="col-md-12 col-xs-12 m-0 p-0">
+        return <div className="col-md-12 col-xs-12 m-0 p-0 my-4">
             <div className="jumbotron bg-dark text-white text-center">
                 <h2 className="mb-5">Recently Added Games</h2>
                 <table className="table bg-dark text-white">
@@ -91,8 +91,10 @@ class Dashboard extends Component {
                         </div>
                     </div>
                 </div>
+                <hr className="mb-4"/>
                 <div className="mt-2 mb-4">{groups.map((e) => this.renderRow(e))}</div>
-                <div className="row">
+                <hr className="mb-4"/>
+                <div className="row my-4">
                     {this.renderRecentlyAdded()}
                 </div>
             </div>

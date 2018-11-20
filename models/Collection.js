@@ -6,6 +6,8 @@ const collectionSchema = new Schema({
     name: String,
     id: String,
     gameCount: String,
+    url: String,
+    color: String,
     gamesCollected: [
         {
             id: Number,

@@ -38,7 +38,7 @@ class addCollection extends Component {
         }
 
         return this.state.consoles.map(console => {
-            return <option key={console.gameCount} count={console.gameCount} id={console.id}>{console.name}</option>
+            return <option key={console.gameCount} count={console.gameCount} url={console.url} color={console.color} id={console.id}>{console.name}</option>
         });
     }
 
@@ -49,9 +49,10 @@ class addCollection extends Component {
         const selectedConsole = select.options[select.selectedIndex].value;
         const id = select.options[select.selectedIndex].id;
         const count = select.options[select.selectedIndex].getAttribute('count');
-        console.log(typeof count);
+        const url = select.options[select.selectedIndex].getAttribute('url');
+        const color = select.options[select.selectedIndex].getAttribute('color');
         const name = document.getElementById('console_name').value;
-        await axios.post(`/api/save_collection?name=${name}&id=${id}&console=${selectedConsole}&gameCount=${count}`);
+        await axios.post(`/api/save_collection?name=${name}&id=${id}&console=${selectedConsole}&gameCount=${count}&url=${url}&color=${color}`);
         this.destroyModal();
         this.props.fetchUser();
     }

@@ -74,6 +74,8 @@ router.post('/save_collection', (req, res) => {
             type: req.query.console,
             name: req.query.name,
             gameCount: req.query.gameCount,
+            url: req.query.url,
+            color: req.query.color,
             gamesCollected: []
         }).save();
 
