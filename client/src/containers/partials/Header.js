@@ -45,6 +45,7 @@ class Header extends Component {
             return;
         }
         await this.props.fetchSearchResults(keyword);
+        this.toggle();
         this.props.history.push(`/search/${keyword}`);
     }
 
@@ -57,11 +58,13 @@ class Header extends Component {
 
     addCollection = () => {
         this.props.showModal("ADD_COLLECTION");
+        this.toggle();
     }
 
     setStore = async (collection) => {
         await this.props.setShowCollection(collection);
         await this.props.fetchGameList(collection.id);
+        this.toggle();
         this.props.history.push(`/users/collections/${collection._id}/${collection.id}`);
     }
 

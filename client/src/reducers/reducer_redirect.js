@@ -1,13 +1,9 @@
-import { SET_SEARCH_REDIRECT } from '../action/types';
+import { SET_REDIRECT } from '../action/types';
 
 export default function (state = "maybe", action) {
     switch (action.type) {
-        case SET_SEARCH_REDIRECT:
-            if (action.payload === undefined || action.payload.length === 0) {
-                return true;
-            } else {
-                return false;
-            }
+        case SET_REDIRECT:
+            return action.payload || false;
         default:
             return state;
     }

@@ -89,13 +89,13 @@ const Sony = {
             "id": 7,
             "name": "PlayStation",
             gameCount: 1731,
-            url: ''
+            url: '//image.flaticon.com/icons/svg/489/489763.svg'
         }, 
         {
             "id": 8,
             "name": "PlayStation 2",
             gameCount: 2348,
-            url: 'src="//image.flaticon.com/icons/svg/588/588366.svg'
+            url: '//image.flaticon.com/icons/svg/588/588366.svg'
         },
         {
             "id": 9,

@@ -67,7 +67,6 @@ router.get('/get_collection', (req, res) => {
 });
 
 router.post('/save_collection', (req, res) => {
-    console.log(req.query.gameCount);
     async function saveCollection() {
         const collection = await new Collection({
             id: req.query.id,
@@ -90,8 +89,12 @@ router.post('/save_collection', (req, res) => {
     saveCollection();
 });
 
+router.post('/update_collection', async (req, res) => {
+    await Collection.findOneAndUpdate({_id: req.body.id}, {$set: {name: req.body.name}});
+    res.end();
+});
+
 router.get('/get_game_list', (req, res) => {
-    console.log(req.query);
     client.games({
         filters: {
             'platforms-in': req.query.id,
@@ -186,6 +189,21 @@ router.get('/current_user', async (req, res) => {
     } else {
         res.send(req.user);
     }
+});
+
+router.post('/update_user', async (req, res) => {
+    await User.findOneAndUpdate({googleID: req.user.googleID}, {$set: {givenName: req.body.givenName, familyName: req.body.familyName}});
+    res.end();
+});
+
+router.post('/delete_user', async (req, res) => {
+    if ( req.user.collections.length > 0 ) {
+        req.user.collections.forEach( async (collection) => {
+            await Collection.findByIdAndDelete({ _id: collection._id });
+        });
+    }
+    await User.findOneAndDelete({_id: req.user._id});
+    res.redirect('/');
 });
 
 router.get('/logout', (req, res) => {

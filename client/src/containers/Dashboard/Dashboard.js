@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { setGameShow, setShowCollection, fetchGameList } from '../../action';
+import { setGameShow, setShowCollection, fetchGameList, showModal } from '../../action';
 import CircularProgressbar from 'react-circular-progressbar';
 import _ from 'lodash';
 import 'react-circular-progressbar/dist/styles.css';
@@ -30,7 +30,11 @@ class Dashboard extends Component {
 
     renderPercentages = () => {
         if (this.props.auth.collections.length === 0) {
-            return 'empty';
+            return <div className="text-center">
+                <h1>Welcome!</h1>
+                <p className="welcome-para">Thank you for setting an account up with us! It appears you have not started a collection yet, would you like to get one started?</p>
+                <button className="btn btn-success" onClick={() => this.props.showModal("ADD_COLLECTION")}>Get Started!</button>
+            </div>;
         }
         return this.props.auth.collections.map(collection => {
             const percentage = ((Number(collection.gamesCollected.length) / Number(collection.gameCount)) * 100).toFixed(1);
@@ -72,6 +76,14 @@ class Dashboard extends Component {
         </div>
     }
 
+    renderTiles = (groups) => {
+        return <Fragment>
+            <hr className="mb-4" />
+            <div className="mt-2 mb-4">{groups.map((e) => this.renderRow(e))}</div>
+            <hr className="mb-4" />
+        </Fragment>
+    }
+
     showGame = async (id) => {
         await this.props.setGameShow(id);
         this.props.history.push(`/games/${id}`);
@@ -91,11 +103,9 @@ class Dashboard extends Component {
                         </div>
                     </div>
                 </div>
-                <hr className="mb-4"/>
-                <div className="mt-2 mb-4">{groups.map((e) => this.renderRow(e))}</div>
-                <hr className="mb-4"/>
+                {groups.length > 0 ? this.renderTiles(groups) : null}
                 <div className="row my-4">
-                    {this.renderRecentlyAdded()}
+                    {this.props.auth.recentGames.length > 0 ? this.renderRecentlyAdded() : null}
                 </div>
             </div>
         );
@@ -106,4 +116,4 @@ function mapStateToProps(state) {
     return { auth: state.auth }
 }
 
-export default withRouter(connect(mapStateToProps, { setGameShow, setShowCollection, fetchGameList })(Dashboard));
+export default withRouter(connect(mapStateToProps, { setGameShow, setShowCollection, fetchGameList, showModal })(Dashboard));

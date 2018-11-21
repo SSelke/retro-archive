@@ -1,10 +1,18 @@
-import { FETCH_USER, DELETE_COLLECTION, DELETE_GAME, DELETE_RECENT_GAMES, UPDATE_RECENT_GAMES, ADD_TO_GAME_COLLECTION } from '../action/types';
+import { FETCH_USER, DELETE_COLLECTION, DELETE_GAME, DELETE_RECENT_GAMES, UPDATE_RECENT_GAMES, ADD_TO_GAME_COLLECTION, UPDATE_USER, DELETE_USER } from '../action/types';
 import _ from 'lodash';
 
 export default function(state = null, action) {
     switch (action.type) {
         case FETCH_USER:
             return action.payload || false;
+        case UPDATE_USER:
+            return {
+                ...state,
+                givenName: action.givenName,
+                familyName: action.familyName
+            }
+        case DELETE_USER:
+            return null;
         case UPDATE_RECENT_GAMES:
             let updateState = {
                 ...state

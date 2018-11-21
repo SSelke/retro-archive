@@ -10,7 +10,7 @@ class Profile extends Component {
     }
 
     editProfile = () => {
-
+        this.props.showModal("EDIT_USER");
     }
 
     renderTable = (auth) => {

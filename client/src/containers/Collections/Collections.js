@@ -6,12 +6,13 @@ import { fetchGameList,
          addToGameList,
          setShowCollection, 
          fetchUser,
+         showModal,
          setGameShow } from '../../action';
 import { Nav, NavItem, NavLink } from 'reactstrap';
+import { Redirect } from 'react-router-dom';
 import classnames from 'classnames';
 import _ from 'lodash';
 import Spinner from '../../components/UI/Spinner';
-import axios from 'axios';
 import "./Collections.css";
 
 class Collections extends Component {
@@ -41,12 +42,6 @@ class Collections extends Component {
         const collection = _.find(collections, { _id: this.props.match.params.id });
         await this.props.setShowCollection(collection);
         await this.props.fetchGameList(this.props.match.params.console);
-    }
-
-    deleteCollection = async () => {
-        axios.delete(`/api/delete_collection?id=${this.props.collection._id}&userID=${this.props.auth.googleID}`);
-        this.props.deleteCollection(this.props.collection._id);
-        this.props.history.push(`/users/dashboard`);
     }
 
     deleteGame = async (id) => {
@@ -115,6 +110,7 @@ class Collections extends Component {
 
         return (
             <div className="container-fluid h-100 my-4" style={{ minHeight: '100vh' }}>
+                {this.props.redirect ? <Redirect to='/users/dashboard' /> : null}
                 <div className="row">
                     <div className="col">
                         <div className="jumbotron d-flex justify-content-center align-items-center">
@@ -123,7 +119,7 @@ class Collections extends Component {
                                 <h5 className="text-muted">{collection.type}</h5>
                             </div>
                             <div className="w-100"> 
-                                <button onClick={this.deleteCollection} className="btn btn-danger btn-small float-right">Delete Collection</button>
+                                <button onClick={() => this.props.showModal("EDIT_COLLECTION")} className="btn btn-info btn-small float-right">Edit Collection</button>
                             </div>
                         </div>
                     </div>
@@ -163,7 +159,7 @@ class Collections extends Component {
 }
 
 const mapStateToProps = state => ({
-    games: state.gameList, collection: state.collection, auth: state.auth
+    games: state.gameList, collection: state.collection, auth: state.auth, redirect: state.redirect
 })
 
 
@@ -175,6 +171,7 @@ export default connect(mapStateToProps, {
                                             deleteCollection,
                                             fetchUser,
                                             pullGame,
+                                            showModal,
                                             setGameShow }
                         )(Collections);
 
